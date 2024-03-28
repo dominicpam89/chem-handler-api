@@ -1,10 +1,11 @@
 import {
-  BadRequestException,
+  Body,
   Controller,
   Delete,
   Get,
   NotFoundException,
   Param,
+  Patch,
   Post,
   Query,
   UseInterceptors,
@@ -13,6 +14,7 @@ import { CompoundsService } from './compounds.service';
 import { CreateCompoundDto } from './dtos/create-compound.dto';
 import { CreateCompoundInterceptor } from './interceptors/create-compound.interceptor';
 import { UseCreateCompound } from './decorators/create-compound.decorator';
+import { UpdateCompoundDto } from './dtos/update-compound.dto';
 
 @Controller('compounds')
 export class CompoundsController {
@@ -49,5 +51,10 @@ export class CompoundsController {
   @Delete('/:pk')
   deleteCompound(@Param('pk') pk: string) {
     return this.compoundService.deleteCompound(pk);
+  }
+
+  @Patch('/:pk')
+  updateCompound(@Param('pk') pk: string, @Body() body: UpdateCompoundDto) {
+    return this.compoundService.updateCompound(pk, body);
   }
 }

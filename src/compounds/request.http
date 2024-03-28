@@ -3,7 +3,7 @@ GET http://localhost:3000/compounds
 
 
 ### Get compound by id
-GET http://localhost:3000/compounds/120
+GET http://localhost:3000/compounds/239
 
 
 ### Get compound by searching with trivial name
@@ -24,4 +24,13 @@ Content-Type: application/json
 
 
 ### Delete Compound
-DELETE http://localhost:3000/compounds/241
+DELETE http://localhost:3000/compounds/239
+
+
+### Update Compound
+PATCH http://localhost:3000/compounds/239
+Content-Type: application/json
+
+{
+    "comedogenicity_class": 3
+}

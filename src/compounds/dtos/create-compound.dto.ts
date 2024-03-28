@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsOptional } from 'class-validator';
+import { IsNumber, IsString, IsOptional, Max, Min } from 'class-validator';
 
 export class CreateCompoundDto {
   @IsNumber()
@@ -18,5 +18,7 @@ export class CreateCompoundDto {
 
   @IsOptional()
   @IsNumber()
+  @Max(2)
+  @Min(0)
   comedogenicity_class?: number;
 }
