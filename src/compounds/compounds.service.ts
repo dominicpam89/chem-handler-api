@@ -1,14 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Compounds } from './compounds.entity';
+import { Compound } from './compounds.entity';
 import { Repository } from 'typeorm';
 import { CreateCompoundDto } from './dtos/create-compound.dto';
 
 @Injectable()
 export class CompoundsService {
-  constructor(
-    @InjectRepository(Compounds) private repo: Repository<Compounds>,
-  ) {}
+  constructor(@InjectRepository(Compound) private repo: Repository<Compound>) {}
 
   getCompounds() {
     return this.repo.find();
@@ -50,7 +48,7 @@ export class CompoundsService {
     return this.repo.remove(compound);
   }
 
-  async updateCompound(pk: string, body: Partial<Compounds>) {
+  async updateCompound(pk: string, body: Partial<Compound>) {
     // first get compound by using existing function in this class "getCompound"
     const compound = await this.getCompound(pk);
 

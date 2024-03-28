@@ -3,10 +3,10 @@ import { Entity, Column, PrimaryColumn } from 'typeorm';
 @Entity()
 /**
  * @description
- * The name of table in database is "Compounds"
+ * The name of table in database is "Compound"
  * So this entity class is match with respectively database table's name
  */
-export class Compounds {
+export class Compound {
   @PrimaryColumn()
   pk: number;
 
