@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Delete,
   Get,
@@ -29,6 +30,10 @@ export class CompoundsController {
 
   @Get('/:pk')
   async getCompound(@Param('pk') pk: string) {
+    if (!Number(pk))
+      throw new NotFoundException(
+        "Couldn't reach page you're looking for, try put compound's id",
+      );
     const compound = await this.compoundService.getCompound(pk);
     if (!compound)
       throw new NotFoundException("Couldn't get compound based on given pk!");
