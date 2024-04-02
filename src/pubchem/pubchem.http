@@ -1,0 +1,17 @@
+### Get by CID with property
+GET http://localhost:3000/pubchem/cid/1/operation?property=molecularWeight
+
+
+
+### Get by CID with image
+GET http://localhost:3000/pubchem/cid/1/operation?image=1
+
+
+
+### Get by CID with synonyms
+GET http://localhost:3000/pubchem/cid/1/operation?synonyms=1
+
+
+
+### Get by CID all
+GET http://localhost:3000/pubchem/cid/1
