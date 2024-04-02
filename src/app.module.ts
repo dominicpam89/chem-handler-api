@@ -4,19 +4,18 @@ import { AppService } from './app.service';
 import { CompoundsModule } from './compounds/compounds.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Compound } from './compounds/compounds.entity';
-import { UsersModule } from './users/users.module';
-import { User } from './users/users.entity';
+import { PubchemModule } from './pubchem/pubchem.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [Compound, User],
+      entities: [Compound],
       synchronize: false,
     }),
     CompoundsModule,
-    UsersModule,
+    PubchemModule,
   ],
   controllers: [AppController],
   providers: [AppService],
