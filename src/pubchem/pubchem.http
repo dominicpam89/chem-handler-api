@@ -1,17 +1,45 @@
-### Get by CID with property
-GET http://localhost:3000/pubchem/cid/1/operation?property=molecularWeight
+### Get by CID full records
+POST http://localhost:3000/pubchem/cid
+Content-Type: application/json
+
+{
+    "id": 12,
+    "operationType": "fullRecords"
+}
+
+### Get response by CID filtered by property
+POST http://localhost:3000/pubchem/cid
+Content-Type: application/json
+
+{
+    "id": 1,
+    "operationType": "property",
+    "propertyName": "MolecularWeight"
+}
+
+
+### Get response by CID filtered by property
+POST http://localhost:3000/pubchem/cid
+Content-Type: application/json
+
+{
+    "id": 1,
+    "operationType": "property",
+    "propertyName": "InChI"
+}
 
 
 
-### Get by CID with image
-GET http://localhost:3000/pubchem/cid/1/operation?image=1
+### Get response by CID filtered only synonyms
+POST http://localhost:3000/pubchem/cid
+Content-Type: application/json
+
+{
+    "id": 1,
+    "operationType": "synonyms"
+}
 
 
 
-### Get by CID with synonyms
-GET http://localhost:3000/pubchem/cid/1/operation?synonyms=1
-
-
-
-### Get by CID all
-GET http://localhost:3000/pubchem/cid/1
+### Get response by CID filtered only PNG
+GET http://localhost:3000/pubchem/cid/3/image

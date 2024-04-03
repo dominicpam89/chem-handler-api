@@ -1,8 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { getResponse } from './pubchem.util';
 
 @Injectable()
 export class PubchemService {
-  getByCid(cid: string, api: string) {}
-  getByName(name: string, api: string) {}
-  getBySmiles(smiles: string, api: string) {}
+  async getByCid(url: string) {
+    const response = await getResponse(url);
+    return await response.json();
+  }
+
+  async getByCidImage(url: string) {
+    const response = await getResponse(url);
+    const imageBuffer = await response.arrayBuffer();
+    return imageBuffer;
+  }
 }

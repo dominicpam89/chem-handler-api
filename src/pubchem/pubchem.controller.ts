@@ -1,44 +1,57 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Res,
+  UseInterceptors,
+} from '@nestjs/common';
 import { PubchemService } from './pubchem.service';
-import { IPubchemAPI, UsePubchemAPI } from './decorators/url.decorator';
+import { Response as ERes } from 'express';
+import { UsePubchemAPI } from './decorators/api-base.decorator';
+import { CIDDto } from './dtos/cid.dto';
+import { PubchemResponseInterceptor } from './interceptors/pubchem-response.interceptor';
 
 @Controller('pubchem')
 export class PubchemController {
   constructor(private pubchemService: PubchemService) {}
 
-  @Get('/cid/:cid')
-  getByCid(
-    @Param('cid') cid: string,
-    @UsePubchemAPI() pubchemAPI: IPubchemAPI,
-  ) {
-    console.log('cid', cid);
-    console.log('pubchemAPI', pubchemAPI);
+  @UseInterceptors(PubchemResponseInterceptor)
+  @Post('/cid')
+  async getByCid(@Body() body: CIDDto, @UsePubchemAPI() apiURI: string) {
+    const { id, operationType, propertyName } = body;
+
+    // creating url based on BODY
+    let url: string = apiURI + 'cid/' + id;
+    switch (operationType) {
+      case 'fullRecords':
+        url += '/JSON';
+        break;
+      case 'property':
+        url += '/property/' + propertyName + '/JSON';
+        break;
+      case 'synonyms':
+        url += '/synonyms/JSON';
+        break;
+      default:
+        throw new BadRequestException('operation undefined');
+    }
+
+    // get the service based on Body.operationType
+    return await this.pubchemService.getByCid(url);
   }
 
-  @Get('/cid/:cid/operation')
-  getByCidWithOperation(
-    @Param('cid') cid: string,
-    @UsePubchemAPI() pubchemAPI: IPubchemAPI,
+  @Get('/cid/:id/image')
+  async getByCidImage(
+    @Param('id') cid: string,
+    @UsePubchemAPI() apiURI: String,
+    @Res() response: ERes,
   ) {
-    console.log('cid', cid);
-    console.log('pubchemAPI', pubchemAPI);
+    const url = apiURI + 'cid/' + cid + '/PNG';
+    const imageBuffer = await this.pubchemService.getByCidImage(url);
+    response.setHeader('Content-Type', 'image/png');
+    response.send(Buffer.from(imageBuffer));
   }
-
-  //   @Get('/name/:name/operation')
-  //   getByName(
-  //     @Param('name') name: string,
-  //     @UseOperation() operation: string,
-  //     @UsePubchemAPI() pubchemAPI: string,
-  //   ) {
-  //     return this.pubchemService.getByName(name, query, pubchemAPI);
-  //   }
-
-  //   @Get('/smiles/:smiles/operation')
-  //   getBySmiles(
-  //     @Param('smiles') smiles: string,
-  //     @UseOperation() operation: string,
-  //     @UsePubchemAPI() pubchemAPI: string,
-  //   ) {
-  //     return this.pubchemService.getBySmiles(smiles, query, pubchemAPI);
-  //   }
 }
