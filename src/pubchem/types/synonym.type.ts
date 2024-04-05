@@ -1,8 +1,12 @@
-type Information = {
+type TInformation = {
   CID: number;
   Synonym: string[];
 };
 
-export type SynonymData = {
-  InformationList: Information;
+type TInformationList = {
+  Information: TInformation[];
+};
+
+export type TSynonymData = {
+  InformationList: TInformationList;
 };

@@ -1,12 +1,12 @@
-export type TProperties = {
+type TProperties = {
   CID: number;
   [key: string]: any;
 };
 
-export type TPropertiesTable = {
+type TPropertiesTable = {
   Properties: TProperties[];
 };
 
-export type PropertyData = {
+export type TPropertyData = {
   PropertyTable: TPropertiesTable;
 };

@@ -92,6 +92,6 @@ export class Compound {
   [key: string]: any;
 }
 
-export type FullRecordsData = {
+export type TFullRecordsData = {
   PC_Compounds: Compound[];
 };
