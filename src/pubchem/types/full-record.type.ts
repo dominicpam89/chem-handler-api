@@ -56,12 +56,14 @@ type CompoundProps = {
     software?: string;
     source?: string;
     parameters?: string;
+    [key: string]: any;
   };
   value: {
     ival?: number;
     fval?: number;
     sval?: string;
     binary?: string;
+    [key: string]: any;
   };
 };
 
