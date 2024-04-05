@@ -12,11 +12,11 @@ type TypeData = TFullRecordsData | TPropertyData | TSynonymData;
   the purpose is to get what kind of data coming from original response:
   can be FullRecordsData, TPropertyData, or TSynonymData
 */
-const EnumData = {
-  fullRecords: 'PC_Compounds',
-  property: 'PropertyTable',
-  synonym: 'InformationList',
-};
+enum EnumData {
+  fullRecords = 'PC_Compounds',
+  property = 'PropertyTable',
+  synonym = 'InformationList',
+}
 
 export class PubchemResponseInterceptor implements NestInterceptor {
   intercept(
@@ -37,10 +37,11 @@ export class PubchemResponseInterceptor implements NestInterceptor {
           // incase data type is based on propertiesTable operation
           case EnumData.property:
             transformedData = this.interceptProperties(data as TPropertyData);
+            break;
           // incase data type is based on synonyms operation
           case EnumData.synonym:
             // temporary, need to update
-            transformedData = data;
+            transformedData = this.interceptSynonyms(data as TSynonymData);
             break;
         }
         return transformedData;
@@ -59,20 +60,25 @@ export class PubchemResponseInterceptor implements NestInterceptor {
       smiles,
     };
   }
-  interceptProperties(TPropertyData: TPropertyData) {
+  interceptProperties(data: TPropertyData) {
     const {
       PropertyTable: { Properties },
-    } = TPropertyData;
-    // temporary
-    return Properties;
-    /** 
-      DTO to make clear output type and data based on
-      one property request
-     */
-    /** 
-      DTO to make clear output type and data based on
-      multiple properties request
-     */
+    } = data;
+    const { CID, ...rest } = Properties[0];
+    return {
+      pk: CID,
+      ...rest,
+    };
+  }
+  interceptSynonyms(data: TSynonymData) {
+    const {
+      InformationList: { Information },
+    } = data;
+    const { CID, Synonym } = Information[0];
+    return {
+      pk: CID,
+      synonyms: [...Synonym],
+    };
   }
   getDataType(data: TypeData): string {
     if (Object.keys(data).includes(EnumData.fullRecords))
