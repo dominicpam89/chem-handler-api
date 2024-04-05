@@ -5,7 +5,8 @@ import { getResponse } from './pubchem.util';
 export class PubchemService {
   async getByCid(url: string) {
     const response = await getResponse(url);
-    return await response.json();
+    const data = await response.json();
+    return data;
   }
 
   async getByCidImage(url: string) {

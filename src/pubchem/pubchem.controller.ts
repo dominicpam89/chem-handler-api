@@ -39,8 +39,8 @@ export class PubchemController {
         throw new BadRequestException('operation undefined');
     }
 
-    // get the service based on Body.operationType
-    return await this.pubchemService.getByCid(url);
+    // get the response based on Body.operationType
+    return this.pubchemService.getByCid(url);
   }
 
   @Get('/cid/:id/image')

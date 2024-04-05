@@ -18,14 +18,14 @@ Content-Type: application/json
 }
 
 
-### Get response by CID filtered by property
+### Get response by CID filtered by multiple properties
 POST http://localhost:3000/pubchem/cid
 Content-Type: application/json
 
 {
     "id": 1,
     "operationType": "property",
-    "propertyName": "InChI"
+    "propertyName": "MolecularWeight,MolecularFormula,HBondDonorCount"
 }
 
 
