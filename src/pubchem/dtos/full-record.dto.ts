@@ -1,5 +1,3 @@
-import { FullRecordsData, Compound } from '../types/full-record.type';
-
 interface AnyObject {
   [key: string]: any;
 }
@@ -15,19 +13,6 @@ export const findValueByKey = (
     if (value !== undefined) return value;
   }
   return undefined;
-};
-
-export const FullRecordsDtoMake = (data: FullRecordsData) => {
-  const compoundData = data.PC_Compounds[0];
-  const pk: number = findValueByKey(data, 'cid');
-  const indexProp = compoundData.props.findIndex(
-    (prop) => prop.urn.label === 'SMILES',
-  );
-  const smiles: string = compoundData.props[indexProp]?.value?.sval;
-  return {
-    pk,
-    smiles,
-  };
 };
 
 import { Expose } from 'class-transformer';
