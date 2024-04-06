@@ -22,7 +22,6 @@ export class PubchemController {
   @Post('/cid')
   async getByCid(@Body() body: CIDDto, @UsePubchemAPI() apiURI: string) {
     const { id, operationType, propertyName } = body;
-
     // creating url based on BODY
     let url: string = apiURI + 'cid/' + id;
     switch (operationType) {
@@ -38,7 +37,6 @@ export class PubchemController {
       default:
         throw new BadRequestException('operation undefined');
     }
-
     // get the response based on Body.operationType
     return this.pubchemService.getByCid(url);
   }

@@ -1,7 +1,4 @@
-import {
-  TypeOperation,
-  TypeOperationValidator,
-} from './../types/operation.type';
+import { TypeOperation, OperationConst } from './../types/operation.type';
 /* 
  "id": 1,
  "operationType": "property",
@@ -15,7 +12,7 @@ export class CIDDto {
   id: number;
 
   @IsString()
-  @IsIn([...TypeOperationValidator])
+  @IsIn([...OperationConst])
   operationType: TypeOperation;
 
   @ValidateIf((object) => object.operationType === 'property')
