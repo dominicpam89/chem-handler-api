@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { PubchemService } from './pubchem.service';
 import { PubchemController } from './pubchem.controller';
-import { ApiMiddleware } from './middlewares/api.middleware';
+import { PubchemApiMiddleware } from './middlewares/pubchem-api.middleware';
 
 @Module({
   providers: [PubchemService],
@@ -9,6 +9,6 @@ import { ApiMiddleware } from './middlewares/api.middleware';
 })
 export class PubchemModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ApiMiddleware).forRoutes('/pubchem');
+    consumer.apply(PubchemApiMiddleware).forRoutes('/pubchem');
   }
 }

@@ -1,5 +1,5 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
-import { PubchemAPIRequest } from '../middlewares/api.middleware';
+import { PubchemAPIRequest } from '../middlewares/pubchem-api.middleware';
 
 export const UsePubchemAPI = createParamDecorator(
   (data: never, context: ExecutionContext) => {
