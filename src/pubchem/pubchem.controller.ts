@@ -16,6 +16,7 @@ import { PubchemResponseInterceptor } from './interceptors/pubchem-response.inte
 import { NameDto } from './dtos/name.dto';
 import { TGetBy } from './types/getby.type';
 import { TypeOperation } from './types/operation.type';
+import { SmilesDto } from './dtos/smiles.dto';
 
 @Controller('pubchem')
 export class PubchemController {
@@ -47,6 +48,23 @@ export class PubchemController {
     return this.pubchemService.getByJSON(url);
   }
 
+  @UseInterceptors(PubchemResponseInterceptor)
+  @Post('/smiles')
+  async getBySmiles(@Body() body: SmilesDto, @UsePubchemAPI() apiURI: string) {
+    const { smiles, operationType, propertyName } = body;
+    // creating url based on BODY
+    const url = this.urlMaker(
+      apiURI,
+      'smiles',
+      smiles,
+      operationType,
+      propertyName,
+    );
+    // get the response based on Body.operationType
+    return this.pubchemService.getByJSON(url);
+  }
+
+  // get image data from pubchem by CID
   @Get('/cid/:id/image')
   async getByCidImage(
     @Param('id') cid: string,
@@ -59,6 +77,7 @@ export class PubchemController {
     response.send(Buffer.from(imageBuffer));
   }
 
+  // get image data from pubchem by Compound's Name
   @Get('/name/:cname/image')
   async getByNameImage(
     @Param('cname') cname: string,
@@ -66,6 +85,19 @@ export class PubchemController {
     @Res() response: ERes,
   ) {
     const url = apiURI + 'name/' + cname + '/PNG';
+    const imageBuffer = await this.pubchemService.getByImage(url);
+    response.setHeader('Content-Type', 'image/png');
+    response.send(Buffer.from(imageBuffer));
+  }
+
+  // get image data from pubchem by Compound's Smiles
+  @Get('/smiles/:smiles/image')
+  async getBySmilesImage(
+    @Param('smiles') smiles: string,
+    @UsePubchemAPI() apiURI: string,
+    @Res() response: ERes,
+  ) {
+    const url = apiURI + 'smiles/' + smiles + '/PNG';
     const imageBuffer = await this.pubchemService.getByImage(url);
     response.setHeader('Content-Type', 'image/png');
     response.send(Buffer.from(imageBuffer));
@@ -83,6 +115,7 @@ export class PubchemController {
     // full records assignment
     if (by === 'cid') url = apiURI + 'cid/' + byValue;
     else if (by === 'name') url = apiURI + 'name/' + byValue;
+    else if (by === 'smiles') url = apiURI + 'smiles/' + byValue;
     switch (operationType) {
       case 'fullRecords':
         url += '/JSON';

@@ -1,1 +1,1 @@
-export type TGetBy = 'cid' | 'name';
+export type TGetBy = 'cid' | 'name' | 'smiles';
