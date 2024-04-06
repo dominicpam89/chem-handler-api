@@ -3,13 +3,13 @@ import { getResponse } from './pubchem.util';
 
 @Injectable()
 export class PubchemService {
-  async getByCid(url: string) {
+  async getByJSON(url: string) {
     const response = await getResponse(url);
     const data = await response.json();
     return data;
   }
 
-  async getByCidImage(url: string) {
+  async getByImage(url: string) {
     const response = await getResponse(url);
     const imageBuffer = await response.arrayBuffer();
     return imageBuffer;
