@@ -109,7 +109,7 @@ export class PubchemController {
     by: TGetBy, // by cid, by name, etc.
     byValue: string | number, // value of cid, value of name accordingly
     operationType: TypeOperation, // filter by operation: fullRecords, property, image, synonyms
-    propertyName: string, // the value of properties's array: "MolecularWeight, InChl"
+    propertyName?: string | undefined, // the value of properties's array: "MolecularWeight, InChl"
   ) {
     let url: string;
     // full records assignment
