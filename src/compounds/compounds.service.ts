@@ -1,65 +1,40 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Compound } from './compounds.entity';
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { CreateCompoundDto } from './dtos/create-compound.dto';
+import { CompoundsRepository } from './compounds.repository';
+import { UpdateCompoundDto } from './dtos/update-compound.dto';
 
 @Injectable()
 export class CompoundsService {
-  constructor(@InjectRepository(Compound) private repo: Repository<Compound>) {}
+  constructor(private repo: CompoundsRepository) {}
 
-  getCompounds() {
-    return this.repo.find();
+  async getCompounds() {
+    const compounds = await this.repo.getCompounds();
+    return compounds;
   }
 
-  getCompound(pk: string) {
-    return this.repo.findOneBy({ pk: parseInt(pk) });
+  getCompound(key: string) {
+    const pk = parseInt(key);
+    if (isNaN(pk)) throw new Error('key must be number after /compounds');
+    return this.repo.getCompound(pk);
   }
 
-  async getCompoundSearch(trivialName: string) {
-    // first get all compounds
-    const compounds = await this.getCompounds();
-
-    // create regex based on search query "trivialName"
-    const regex = new RegExp(trivialName, 'i');
-
-    // filter compounds to only return compound.trivial_name === regex
-    return compounds.filter((compound) => regex.test(compound.trivial_name));
+  async getCompoundsByName(trivial_name: string) {
+    return this.repo.getCompoundsByName(trivial_name);
   }
 
   createCompound(compound: CreateCompoundDto) {
-    /**
-     * create entity using "create" would have hooks
-     * such as afterInsert, afterUpdate in Compounds entity
-     */
-    const newCompound = this.repo.create(compound);
-    return this.repo.save(newCompound);
+    return this.repo.createCompound(compound);
   }
 
-  async deleteCompound(pk: string) {
-    // first get compound by using existing function in this class "getCompound"
-    const compound = await this.getCompound(pk);
-
-    // throw 404 if no compound found
-    if (!compound)
-      throw new NotFoundException("Couldn't found given compound pk");
-
-    // delete compound
-    return this.repo.remove(compound);
+  async deleteCompound(key: string) {
+    const pk = parseInt(key);
+    if (isNaN(pk)) throw new Error('key must be number after /compounds');
+    return this.repo.deleteCompound(pk);
   }
 
-  async updateCompound(pk: string, body: Partial<Compound>) {
-    // first get compound by using existing function in this class "getCompound"
-    const compound = await this.getCompound(pk);
-
-    // throw 404 if no compound found
-    if (!compound)
-      throw new NotFoundException("Couldn't found given compound pk");
-
-    // assign update data from body to compound object
-    Object.assign(compound, body);
-
-    // save it in database
-    return this.repo.save(compound);
+  async updateCompound(key: string, body: UpdateCompoundDto) {
+    const pk = parseInt(key);
+    if (isNaN(pk)) throw new Error('key must be number after /compounds');
+    return this.repo.updateCompound(pk, body);
   }
 }

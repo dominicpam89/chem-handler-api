@@ -21,5 +21,5 @@ export class UpdateCompoundDto {
   @IsNumber()
   @Max(2)
   @Min(0)
-  comedogenicity_class?: number;
+  comedogenicity_class?: number | null;
 }

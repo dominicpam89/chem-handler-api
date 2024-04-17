@@ -1,17 +1,17 @@
 import { IsNumber, IsString, IsOptional, Max, Min } from 'class-validator';
 
 export class CreateCompoundDto {
-  @IsNumber()
-  pk: number;
-
+  @IsOptional()
   @IsString()
-  trivial_name: string;
+  trivial_name?: string;
 
+  @IsOptional()
   @IsString()
-  cas_number: string;
+  cas_number?: string;
 
+  @IsOptional()
   @IsString()
-  inci_name: string;
+  inci_name?: string;
 
   @IsString()
   smiles: string;
@@ -20,5 +20,5 @@ export class CreateCompoundDto {
   @IsNumber()
   @Max(2)
   @Min(0)
-  comedogenicity_class?: number;
+  comedogenicity_class?: number | null;
 }
